@@ -9,7 +9,6 @@ def mat_mul(mat1, mat2):
 
     result = []
 
-
     for i in range(len(mat1)):
         result.append([])
         for j in range(len(mat2[0])):
