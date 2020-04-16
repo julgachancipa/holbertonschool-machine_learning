@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The Whole Barn"""
+"""Squashed Like Sardines"""
 
 
 def cat_matrices(mat1, mat2, axis=0):
@@ -16,7 +16,9 @@ def cat_matrices(mat1, mat2, axis=0):
     final_shape = mat1_shape[:]
     final_shape[axis] = mat1_shape[axis] + mat2_shape[axis]
 
-    print('s1: {}, s2: {}, fs: {}'.format(mat1_shape, mat2_shape, final_shape))
+    """print('s1: {}, s2: {}, fs: {}'
+    .format(mat1_shape, mat2_shape, final_shape))
+    """
     arr = sort_arr(arr1, arr2, mat1_shape,
                    mat2_shape, final_shape, axis)
     return reshape(arr, final_shape)
