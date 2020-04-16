@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 """The Whole Barn"""
-from functools import reduce
-from operator import mul
 
 
 def add_matrices(mat1, mat2):
@@ -49,3 +47,20 @@ def reshape(lst, shape):
     n = reduce(mul, shape[1:])
     return [reshape(lst[i*n:(i+1)*n], shape[1:])
             for i in range(len(lst)//n)]
+
+
+def reduce(function, iterable, initializer=None):
+    """Reduce funcion"""
+    it = iter(iterable)
+    if initializer is None:
+        value = next(it)
+    else:
+        value = initializer
+    for element in it:
+        value = function(value, element)
+    return value
+
+
+def mul(a, b):
+    """Mul a*b"""
+    return a * b
