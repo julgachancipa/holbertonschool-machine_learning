@@ -8,26 +8,25 @@ def cat_matrices(mat1, mat2, axis=0):
     mat1_shape = matrix_shape(mat1)
     mat2_shape = matrix_shape(mat2)
 
-    """
     if len(mat1_shape) != len(mat2_shape):
         return None
-    """
+
+    for i in range(len(mat1_shape)):
+        if mat1_shape[i] != mat2_shape[i] and axis != i:
+            return None
+
     arr1 = flat_mtx(mat1).copy()
     arr2 = flat_mtx(mat2).copy()
 
     final_shape = mat1_shape[:]
     final_shape[axis] = mat1_shape[axis] + mat2_shape[axis]
-    """
-    if mat1_shape == mat2_shape:
-        arr = sort_arr(arr1, arr2, mat1_shape,
-                       mat2_shape, axis)
-    else:"""
-    arr = sort_dif(arr1, arr2, mat1_shape,
+
+    arr = sort_arr(arr1, arr2, mat1_shape,
                    mat2_shape, axis)
     return reshape(arr, final_shape)
 
 
-def sort_dif(arr1, arr2, sh1, sh2, ax):
+def sort_arr(arr1, arr2, sh1, sh2, ax):
     """Sort array following the new shape"""
     aux = []
     n1 = 1
@@ -43,20 +42,6 @@ def sort_dif(arr1, arr2, sh1, sh2, ax):
         st1 += n1
         st2 += n2
     return aux
-
-
-def sort_arr(arr1, arr2, sh1, sh2, ax):
-    """Sort array following the new shape"""
-    arr = []
-    st1 = 0
-    st2 = 0
-
-    while st1 < len(arr1) and st2 < len(arr2):
-        arr += arr1[st1:(st1 + sh1[ax])]
-        arr += arr2[st2:(st2 + sh2[ax])]
-        st1 += sh1[ax]
-        st2 += sh2[ax]
-    return arr
 
 
 def matrix_shape(matrix):
