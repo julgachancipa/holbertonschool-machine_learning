@@ -11,8 +11,8 @@ def cat_matrices(mat1, mat2, axis=0):
     if len(mat1_shape) != len(mat2_shape):
         return None
 
-    arr1 = flat_mtx(mat1)
-    arr2 = flat_mtx(mat2)
+    arr1 = flat_mtx(mat1).copy()
+    arr2 = flat_mtx(mat2).copy()
 
     final_shape = mat1_shape[:]
     final_shape[axis] = mat1_shape[axis] + mat2_shape[axis]
