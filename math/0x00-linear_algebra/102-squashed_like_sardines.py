@@ -8,9 +8,10 @@ def cat_matrices(mat1, mat2, axis=0):
     mat1_shape = matrix_shape(mat1)
     mat2_shape = matrix_shape(mat2)
 
+    """
     if len(mat1_shape) != len(mat2_shape):
         return None
-
+    """
     arr1 = flat_mtx(mat1).copy()
     arr2 = flat_mtx(mat2).copy()
 
