@@ -10,14 +10,6 @@ def cat_matrices(mat1, mat2, axis=0):
 
     if len(mat1_shape) != len(mat2_shape):
         return None
-    flag = True
-    for i in range(len(mat1_shape)):
-        if mat1_shape[i] != mat2_shape[i]:
-            flag = False
-    if mat1_shape[axis] != mat2_shape[axis]:
-        flag = True
-    if flag == False:
-        return None
 
     arr1 = flat_mtx(mat1)
     arr2 = flat_mtx(mat2)
@@ -25,14 +17,12 @@ def cat_matrices(mat1, mat2, axis=0):
     final_shape = mat1_shape[:]
     final_shape[axis] = mat1_shape[axis] + mat2_shape[axis]
 
-    """
     if mat1_shape == mat2_shape:
         arr = sort_arr(arr1, arr2, mat1_shape,
                        mat2_shape, axis)
     else:
-        """
-    arr = sort_dif(arr1, arr2, mat1_shape,
-                   mat2_shape, axis)
+        arr = sort_dif(arr1, arr2, mat1_shape,
+                       mat2_shape, axis)
     return reshape(arr, final_shape)
 
 
