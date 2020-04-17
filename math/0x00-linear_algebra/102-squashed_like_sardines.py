@@ -16,13 +16,13 @@ def cat_matrices(mat1, mat2, axis=0):
 
     final_shape = mat1_shape[:]
     final_shape[axis] = mat1_shape[axis] + mat2_shape[axis]
-
+    """
     if mat1_shape == mat2_shape:
         arr = sort_arr(arr1, arr2, mat1_shape,
                        mat2_shape, axis)
-    else:
-        arr = sort_dif(arr1, arr2, mat1_shape,
-                       mat2_shape, axis)
+    else:"""
+    arr = sort_dif(arr1, arr2, mat1_shape,
+                   mat2_shape, axis)
     return reshape(arr, final_shape)
 
 
@@ -31,12 +31,12 @@ def sort_dif(arr1, arr2, sh1, sh2, ax):
     aux = []
     n1 = 1
     n2 = 1
-    for i in range(1, len(sh1)):
+    for i in range(ax, len(sh1)):
         n1 *= sh1[i]
         n2 *= sh2[i]
     st1 = 0
     st2 = 0
-    for t in range(sh1[(ax - 1)]):
+    while st1 < len(arr1) and st2 < len(arr2):
         aux += arr1[st1:(st1 + n1)]
         aux += arr2[st2:(st2 + n2)]
         st1 += n1
