@@ -4,8 +4,11 @@
 
 def poly_derivative(poly):
     """calculates the derivative of a polynomial"""
-    if poly == [] or poly == [0] * len(poly):
+    if poly == []:
         return None
+    for p in poly:
+        if not isinstance(p, int):
+            return None
     result = []
     for i in range(1, len(poly)):
         result.append(i * poly[i])
