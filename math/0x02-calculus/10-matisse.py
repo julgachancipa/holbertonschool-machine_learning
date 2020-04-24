@@ -4,6 +4,8 @@
 
 def poly_derivative(poly):
     """calculates the derivative of a polynomial"""
+    if type(poly) != list:
+        return None
     if poly == []:
         return None
     if len(poly) == 1:
