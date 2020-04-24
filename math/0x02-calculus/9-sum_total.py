@@ -4,11 +4,7 @@
 
 def summation_i_squared(n):
     """Calculates the summation of i²
-    in a [1, n]"""
+    in a [1, n] range"""
 
-    result = 0
-
-    for i in range(1, n + 1):
-        result += i**2
-
-    return result
+    range_l = list(range(1, n+1))
+    return sum(map(lambda i: i**2, range_l))
