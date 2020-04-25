@@ -10,11 +10,12 @@ def poly_integral(poly, C=0):
     if poly == []:
         return None
 
+    if poly == [0]:
+        return [C]
+
     result = [C]
 
     for i in range(len(poly)):
-        if type(poly[i]) != int:
-            return None
         r = poly[i] / (i+1)
         if r.is_integer():
             r = int(r)
