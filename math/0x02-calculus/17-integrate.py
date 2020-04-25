@@ -15,7 +15,4 @@ def poly_integral(poly, C=0):
         else:
             result.append(poly[i] / (i+1))
 
-    if result == [0] * len(result):
-        return [0]
-
     return result
