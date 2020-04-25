@@ -14,6 +14,6 @@ def poly_integral(poly, C=0):
         if r.is_integer():
             r = int(r)
         result.append(r)
-    while result[-1] == 0:
-        result.pop()
+    if result == [0] * len(result):
+        return [0]
     return result
