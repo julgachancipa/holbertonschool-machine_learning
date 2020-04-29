@@ -31,3 +31,13 @@ class Normal:
                 s_dif.append((d - self.mean)**2)
 
             self.stddev = (sum(s_dif) / len(s_dif))**(1/2)
+
+    def z_score(self, x):
+        """Calculates the z-score of a given x-value"""
+
+        return (x - self.mean) / self.stddev
+
+    def x_value(self, z):
+        """Calculates the x-value of a given z-score"""
+
+        return self.stddev * z + self.mean
