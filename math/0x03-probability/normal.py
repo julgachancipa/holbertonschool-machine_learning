@@ -14,7 +14,7 @@ class Normal:
         self.data = data
 
         if data is None:
-            if stddev < 0:
+            if stddev <= 0:
                 raise ValueError('stddev must be a positive value')
             self.stddev = float(stddev)
             self.mean = float(mean)
@@ -47,3 +47,8 @@ class Normal:
         aux = ((x - self.mean) / self.stddev)**2
 
         return (1 / (self.stddev * (2 * pi)**(1/2))) * e**((-1/2) * aux)
+
+    def cdf(self, x):
+        """Calculates the value of the CDF for a given x-value"""
+        a = (1/(2 * pi)**(1/2))*e**(((-self.z_score(70))**2)/2)
+        return a
