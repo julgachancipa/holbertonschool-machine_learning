@@ -6,6 +6,14 @@ pi = 3.1415926536
 e = 2.7182818285
 
 
+def erf(x):
+    """error function encountered in
+    integrating the normal distribution"""
+    a = (2 / (pi**(1/2)))
+    b = (x - ((x**3)/3) + ((x**5)/10) - ((x**7)/42) + ((x**9)/216))
+    return a * b
+
+
 class Normal:
     """Represents an normal distribution"""
 
@@ -50,5 +58,5 @@ class Normal:
 
     def cdf(self, x):
         """Calculates the value of the CDF for a given x-value"""
-        a = (1/(2 * pi)**(1/2))*e**(((-self.z_score(70))**2)/2)
-        return a
+        aux = (x - self.mean)/(self.stddev * (2**(1/2)))
+        return (1/2) * (1 + erf(aux))
