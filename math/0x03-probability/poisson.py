@@ -34,6 +34,8 @@ class Poisson:
         """Calculates the value of the PMF
         for a given number of successes (k)"""
 
+        if k < 0:
+            return 0
         if type(k) != int:
             k = int(k)
         return (e**(-self.lambtha) * self.lambtha**k) / factorial(k)
@@ -41,6 +43,9 @@ class Poisson:
     def cdf(self, k):
         """Calculates the value of the CDF
         for a given number of successes (k)"""
+
+        if k < 0:
+            return 0
 
         if type(k) != int:
             k = int(k)
