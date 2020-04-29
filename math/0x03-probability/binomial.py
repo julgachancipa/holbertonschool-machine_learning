@@ -6,6 +6,11 @@ pi = 3.1415926536
 e = 2.7182818285
 
 
+def factorial(n):
+    """Finds the factorial of a given number"""
+    return 1 if (n == 1 or n == 0) else n * factorial(n - 1)
+
+
 class Binomial:
     """Represents a binomial distribution"""
 
@@ -35,3 +40,9 @@ class Binomial:
             p = -((var / mean) - 1)
             self.n = round(mean / p)
             self.p = mean / self.n
+
+    def pmf(self, k):
+        """Calculates the value of the PMF
+        for a given number of successes"""
+        a = factorial(self.n) / (factorial(k) * factorial(self.n - k))
+        return a * self.p**k * (1 - self.p)**(self.n - k)
