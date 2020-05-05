@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Privatize Neuron"""
+"""Neuron Cost"""
 import numpy as np
 
 

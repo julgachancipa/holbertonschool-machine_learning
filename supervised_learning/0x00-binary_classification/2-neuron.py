@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Privatize Neuron"""
+"""Neuron Forward Propagation"""
 import numpy as np
 
 
