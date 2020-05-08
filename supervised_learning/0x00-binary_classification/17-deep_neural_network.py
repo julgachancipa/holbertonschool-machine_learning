@@ -31,7 +31,8 @@ class DeepNeuralNetwork:
                 aux = layers[i-1]
             else:
                 aux = nx
-            self.__weights[kW] = np.random.randn(layers[i], aux) * np.sqrt(2/aux)
+            self.__weights[kW] = np.random.randn(layers[i],
+                                                 aux) * np.sqrt(2/aux)
 
     @property
     def L(self):
