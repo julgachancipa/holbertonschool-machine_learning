@@ -6,7 +6,7 @@ import numpy as np
 def one_hot_encode(Y, classes):
     """ that converts a numeric label
     vector into a one-hot matrix"""
-    if classes < 3:
+    if classes < 3 or all(x >= classes for x in Y):
         return None
     m = Y.shape[0]
     mtx = np.zeros((m, classes))
