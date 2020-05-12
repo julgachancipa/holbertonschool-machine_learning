@@ -8,7 +8,7 @@ def one_hot_encode(Y, classes):
     vector into a one-hot matrix"""
     if classes < 3 or type(classes) is not int:
         return None
-    if Y is None:
+    if Y is None or type(Y) != np.ndarray:
         return None
     for c in Y:
         if c >= classes:
