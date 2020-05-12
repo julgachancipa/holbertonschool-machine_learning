@@ -69,16 +69,16 @@ class DeepNeuralNetwork:
         """Calculates the forward propagation
         of the neural network"""
         self.__cache["A0"] = X
-        for l in range(self.__L):
-            Al = self.__cache["A" + str(l)]
-            Wl = self.__weights["W" + str(l + 1)]
-            bl = self.__weights["b" + str(l + 1)]
+        for lay in range(self.__L):
+            Al = self.__cache["A" + str(lay)]
+            Wl = self.__weights["W" + str(lay + 1)]
+            bl = self.__weights["b" + str(lay + 1)]
             Zl = np.matmul(Wl, Al) + bl
-            if l != self.__L - 1:
-                self.__cache["A" + str(l + 1)] = sigmoid(Zl)
+            if lay != self.__L - 1:
+                self.__cache["A" + str(lay + 1)] = sigmoid(Zl)
             else:
-                self.__cache["A" + str(l + 1)] = softmax(Zl)
-        return self.__cache["A" + str(l + 1)], self.__cache
+                self.__cache["A" + str(lay + 1)] = softmax(Zl)
+        return self.__cache["A" + str(lay + 1)], self.__cache
 
     def cost(self, Y, A):
         """Calculates the cost of the
