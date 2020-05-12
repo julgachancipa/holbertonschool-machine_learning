@@ -8,7 +8,6 @@ def one_hot_decode(one_hot):
     matrix into a vector of labels"""
     if one_hot is None or type(one_hot) != np.ndarray:
         return None
-    for x in one_hot.flatten():
-        if x != 0 or x != 1:
-            return None
+    if len(one_hot.shape) != 2:
+        return None
     return np.argmax(one_hot, axis=0)
