@@ -10,10 +10,13 @@ def one_hot_encode(Y, classes):
         return None
     if Y is None:
         return None
+    for c in Y:
+        if c >= classes:
+            return None
     m = Y.shape[0]
     mtx = np.zeros((m, classes))
 
-    for col, c_label in zip(mtx, Y):
-        col[c_label] = 1
+    for row, c_label in zip(mtx, Y):
+        row[c_label] = 1
 
     return mtx.T
