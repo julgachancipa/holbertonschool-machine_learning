@@ -8,7 +8,7 @@ import os.path
 
 def tanh(z):
     """Calculates the tanh function"""
-    return (np.exp(z) - np.exp(-z)) / (np.exp(z) + np.exp(-z))
+    return np.sinh(z) / np.cosh(z)
 
 
 def sigmoid(z):
@@ -89,8 +89,8 @@ class DeepNeuralNetwork:
             if lay != self.__L - 1:
                 if self.__activation == 'sig':
                     self.__cache["A" + str(lay + 1)] = sigmoid(Zl)
-                else:
-                    self.__cache["A" + str(lay + 1)] = np.tanh(Zl)
+                elif self.__activation == 'tanh':
+                    self.__cache["A" + str(lay + 1)] = tanh(Zl)
             else:
                 self.__cache["A" + str(lay + 1)] = softmax(Zl)
         return self.__cache["A" + str(lay + 1)], self.__cache
@@ -113,14 +113,14 @@ class DeepNeuralNetwork:
         descent on the neural network"""
         m = (Y.shape[1])
         Al = cache["A" + str(self.__L)]
-        dAl = -(Y/Al) + (1-Y)/(1-Al)
+        dAl = Al - Y
         for l in reversed(range(1, self.__L + 1)):
             Al = cache["A" + str(l)]
             if self.__activation == 'sig':
                 gl_d = Al * (1 - Al)
             else:
                 gl_d = 1 - np.power(Al, 2)
-            dZl = np.multiply(dAl, gl_d)
+            dZl = dAl * gl_d
             Al_1 = cache["A" + str(l - 1)]
             dWl = (1/m) * np.matmul(dZl, Al_1.T)
             dbl = (1/m) * np.sum(dZl, axis=1, keepdims=True)
