@@ -90,7 +90,7 @@ class DeepNeuralNetwork:
     def evaluate(self, X, Y):
         """Evaluates the neurons predictions"""
         AF, cache = self.forward_prop(X)
-        A = np.where(A == np.amax(A, axis=0), 1, 0)
+        A = np.where(AF == np.amax(AF, axis=0), 1, 0)
         return A, self.cost(Y, AF)
 
     def gradient_descent(self, Y, cache, alpha=0.05):
@@ -137,7 +137,7 @@ class DeepNeuralNetwork:
             A, self.__cache = self.forward_prop(X)
             self.gradient_descent(Y, self.__cache, alpha)
             c = self.cost(Y, A)
-            if not i % 100:
+            if not i % step:
                 if verbose:
                     print('Cost after {} iterations: {}'.format(i, c))
                 g_x.append(i)
