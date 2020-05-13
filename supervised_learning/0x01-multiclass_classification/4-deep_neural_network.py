@@ -120,7 +120,10 @@ class DeepNeuralNetwork:
                 gl_d = Al * (1 - Al)
             else:
                 gl_d = 1 - np.power(Al, 2)
-            dZl = dAl * gl_d
+            if l == self.__L:
+                dZl = dAl
+            else:
+                dZl = dAl * gl_d
             Al_1 = cache["A" + str(l - 1)]
             dWl = (1/m) * np.matmul(dZl, Al_1.T)
             dbl = (1/m) * np.sum(dZl, axis=1, keepdims=True)
@@ -155,7 +158,7 @@ class DeepNeuralNetwork:
             A, self.__cache = self.forward_prop(X)
             self.gradient_descent(Y, self.__cache, alpha)
             c = self.cost(Y, A)
-            if not i % step:
+            if i % step == 0:
                 if verbose:
                     print('Cost after {} iterations: {}'.format(i, c))
                 g_x.append(i)
