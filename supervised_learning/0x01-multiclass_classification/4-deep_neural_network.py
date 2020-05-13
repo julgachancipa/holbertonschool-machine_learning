@@ -36,7 +36,7 @@ class DeepNeuralNetwork:
             raise ValueError('nx must be a positive integer')
         if type(layers) != list or len(layers) < 1:
             raise TypeError('layers must be a list of positive integers')
-        if activation != 'sig' or activation != 'tanh':
+        if activation not in ['sig', 'tanh']:
             raise ValueError("activation must be 'sig' or 'tanh'")
         self.__L = len(layers)
         self.__cache = {}
@@ -114,24 +114,24 @@ class DeepNeuralNetwork:
         m = (Y.shape[1])
         Al = cache["A" + str(self.__L)]
         dAl = Al - Y
-        for l in reversed(range(1, self.__L + 1)):
-            Al = cache["A" + str(l)]
+        for lay in reversed(range(1, self.__L + 1)):
+            Al = cache["A" + str(lay)]
             if self.__activation == 'sig':
                 gl_d = Al * (1 - Al)
             else:
                 gl_d = 1 - np.power(Al, 2)
-            if l == self.__L:
+            if lay == self.__L:
                 dZl = dAl
             else:
                 dZl = dAl * gl_d
-            Al_1 = cache["A" + str(l - 1)]
+            Al_1 = cache["A" + str(lay - 1)]
             dWl = (1/m) * np.matmul(dZl, Al_1.T)
             dbl = (1/m) * np.sum(dZl, axis=1, keepdims=True)
-            Wl = self.__weights["W" + str(l)]
+            Wl = self.__weights["W" + str(lay)]
             dAl = np.matmul(Wl.T, dZl)
 
-            kW = "W" + str(l)
-            kb = "b" + str(l)
+            kW = "W" + str(lay)
+            kb = "b" + str(lay)
             self.__weights[kW] = self.__weights[kW] - alpha * dWl
             self.__weights[kb] = self.__weights[kb] - alpha * dbl
 
