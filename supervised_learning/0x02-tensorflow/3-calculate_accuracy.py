@@ -9,5 +9,5 @@ def calculate_accuracy(y, y_pred):
     """
     calculates the accuracy of a prediction
     """
-    mean = tf.losses.mean_squared_error(labels=y, predictions=y_pred)
-    return mean
+    accuracy = tf.reduce_mean(tf.cast(tf.equal(y, y_pred), tf.float32))
+    return accuracy
