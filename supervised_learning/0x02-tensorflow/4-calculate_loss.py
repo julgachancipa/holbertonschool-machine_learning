@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-import tensorflow as tf
 """
 Loss
 """
+import tensorflow as tf
 
 
 def calculate_loss(y, y_pred):
