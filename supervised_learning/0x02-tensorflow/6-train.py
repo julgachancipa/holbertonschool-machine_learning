@@ -42,6 +42,6 @@ def train(X_train, Y_train, X_valid, Y_valid, layer_sizes, activations,
             print('\tValidation Accuracy: {}'.format(acc_v))
         sess.run(train_op, feed_dict={x: X_train, y: Y_train})
 
-    tf.train.Saver()
+    saver = tf.train.Saver()
     save_path = saver.save(sess, save_path)
     return save_path
