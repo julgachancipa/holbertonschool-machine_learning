@@ -24,8 +24,16 @@ def train(X_train, Y_train, X_valid, Y_valid, layer_sizes, activations,
     accuracy = calculate_accuracy(y, y_pred)
     train_op = create_train_op(loss, alpha)
 
-    init = tf.global_variables_initializer()
+    tf.add_to_collection("x", x)
+    tf.add_to_collection("y", y)
+    tf.add_to_collection("y_pred", y_pred)
+    tf.add_to_collection("loss", loss)
+    tf.add_to_collection("accuracy", accuracy)
+    tf.add_to_collection("train_op", train_op)
 
+    init = tf.global_variables_initializer()
+    saver = tf.train.Saver({'x': x, 'y': y, 'y_pred': y_pred, 'loss': loss,
+                            'accuracy': accuracy, 'train_op': train_op})
     sess = tf.Session()
     sess.run(init)
 
@@ -41,8 +49,5 @@ def train(X_train, Y_train, X_valid, Y_valid, layer_sizes, activations,
             print('\tValidation Cost: {}'.format(loss_v))
             print('\tValidation Accuracy: {}'.format(acc_v))
         sess.run(train_op, feed_dict={x: X_train, y: Y_train})
-
-    tf.train.export_meta_graph(filename=save_path,
-                               collection_list=["x", "y", "y_pred"
-                                                "accuracy", "train_op"])
+    save_path = saver.save(sess, save_path)
     return save_path
