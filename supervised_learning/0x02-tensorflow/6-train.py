@@ -43,5 +43,6 @@ def train(X_train, Y_train, X_valid, Y_valid, layer_sizes, activations,
         sess.run(train_op, feed_dict={x: X_train, y: Y_train})
 
     tf.train.export_meta_graph(filename=save_path,
-                               collection_list=["input_tensor", "output_tensor"])
+                               collection_list=["x", "y", "y_pred"
+                                                "accuracy", "train_op"])
     return save_path
