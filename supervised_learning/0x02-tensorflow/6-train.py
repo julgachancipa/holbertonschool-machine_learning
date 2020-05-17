@@ -26,8 +26,6 @@ def train(X_train, Y_train, X_valid, Y_valid, layer_sizes, activations,
 
     init = tf.global_variables_initializer()
 
-    saver = tf.train.Saver()
-
     sess = tf.Session()
     sess.run(init)
 
@@ -42,9 +40,8 @@ def train(X_train, Y_train, X_valid, Y_valid, layer_sizes, activations,
             print('\tTraining Accuracy: {}'.format(acc_t))
             print('\tValidation Cost: {}'.format(loss_v))
             print('\tValidation Accuracy: {}'.format(acc_v))
-        if i <= iterations:
-            sess.run(train_op, feed_dict={x: X_train, y: Y_train})
+        sess.run(train_op, feed_dict={x: X_train, y: Y_train})
 
-    save_path = saver.save(sess, save_path)
-    sess.close()
+    tf.train.export_meta_graph(filename=save_path,
+                               collection_list=["input_tensor", "output_tensor"])
     return save_path
