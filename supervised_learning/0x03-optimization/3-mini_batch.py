@@ -42,28 +42,32 @@ def train_mini_batch(X_train, Y_train, X_valid, Y_valid,
         accuracy = tf.get_collection('accuracy')[0]
         train_op = tf.get_collection('train_op')[0]
 
-        for e in range(epochs):
+        for e in range(epochs + 1):
             x_t, y_t, loss_t, acc_t = sess.run((x, y, loss, accuracy),
                                                feed_dict={x: X_train,
                                                           y: Y_train})
             loss_v, acc_v = sess.run((loss, accuracy),
                                      feed_dict={x: X_valid, y: Y_valid})
-            shuffle_data(x_t, y_t)
+            x_t, y_t = shuffle_data(x_t, y_t)
             print('After {} epochs:'.format(e))
             print('\tTraining Cost: {}'.format(loss_t))
             print('\tTraining Accuracy: {}'.format(acc_t))
             print('\tValidation Cost: {}'.format(loss_v))
             print('\tValidation Accuracy: {}'.format(acc_v))
 
-            X_batch_t = get_batches(x_t, batch_size)
-            Y_batch_t = get_batches(y_t, batch_size)
-            for b in range(len(X_batch_t)):
-                loss_t, acc_t = sess.run((loss, accuracy),
-                                         feed_dict={x: X_batch_t[b],
-                                                    y: Y_batch_t[b]})
-                if not b % 100 and b > 0:
-                    print('\tStep {}:'.format(b))
-                    print('\t\tCost: {}'.format(loss_t))
-                    print('\t\tAccuracy: {}'.format(acc_t))
-                sess.run(train_op, feed_dict={x: X_batch_t[b],
-                                              y: Y_batch_t[b]})
+            if e < epochs:
+                X_batch_t = get_batches(x_t, batch_size)
+                Y_batch_t = get_batches(y_t, batch_size)
+                for b in range(len(X_batch_t)):
+                    loss_t, acc_t = sess.run((loss, accuracy),
+                                             feed_dict={x: X_batch_t[b],
+                                                        y: Y_batch_t[b]})
+                    if not b % 100 and b > 0:
+                        print('\tStep {}:'.format(b))
+                        print('\t\tCost: {}'.format(loss_t))
+                        print('\t\tAccuracy: {}'.format(acc_t))
+                    sess.run(train_op, feed_dict={x: X_batch_t[b],
+                                                  y: Y_batch_t[b]})
+
+        save_path = saver.save(sess, save_path)
+    return save_path
