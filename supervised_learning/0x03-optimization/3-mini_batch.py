@@ -13,12 +13,14 @@ def get_batches(a, batch_size):
     b_list = []
     i = 0
     m = a.shape[0]
-    batches = int(m / batch_size) + (m % batch_size > 0)
+    # batches = int(m / batch_size) + (m % batch_size > 0)
+    batches = int(m / batch_size)
     for b in range(batches):
-        if b != batches-1:
+        """if b != batches-1:
             b_list.append(a[i:(i+32)])
         else:
-            b_list.append(a[i:])
+            b_list.append(a[i:])"""
+        b_list.append(a[i:(i + 32)])
         i += 32
     return b_list
 
@@ -56,12 +58,12 @@ def train_mini_batch(X_train, Y_train, X_valid, Y_valid,
             X_batch_t = get_batches(x_t, batch_size)
             Y_batch_t = get_batches(y_t, batch_size)
             for b in range(len(X_batch_t)):
+                loss_t, acc_t = sess.run((loss, accuracy),
+                                         feed_dict={x: X_batch_t[b],
+                                                    y: Y_batch_t[b]})
                 if not b % 100 and b > 0:
                     print('\tStep {}:'.format(b))
                     print('\t\tCost: {}'.format(loss_t))
                     print('\t\tAccuracy: {}'.format(acc_t))
-                loss_t, acc_t = sess.run((loss, accuracy),
-                                         feed_dict={x: X_batch_t[b],
-                                                    y: Y_batch_t[b]})
                 sess.run(train_op, feed_dict={x: X_batch_t[b],
                                               y: Y_batch_t[b]})
