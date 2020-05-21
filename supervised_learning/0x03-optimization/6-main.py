@@ -12,8 +12,9 @@ def one_hot(Y, classes):
     one_hot[np.arange(Y.shape[0]), Y] = 1
     return one_hot
 
+
 if __name__ == '__main__':
-    lib= np.load('../data/MNIST.npz')
+    lib = np.load('../data/MNIST.npz')
     X_3D = lib['X_train']
     Y = lib['Y_train']
     X = X_3D.reshape((X_3D.shape[0], -1))
@@ -31,10 +32,10 @@ if __name__ == '__main__':
         sess.run(init)
         for i in range(1000):
             if not (i % 100):
-                cost = sess.run(loss, feed_dict={x:X, y:Y_oh})
+                cost = sess.run(loss, feed_dict={x: X, y: Y_oh})
                 print('Cost after {} iterations: {}'.format(i, cost))
-            sess.run(train_op, feed_dict={x:X, y:Y_oh})
-        cost, Y_pred_oh = sess.run((loss, y_pred), feed_dict={x:X, y:Y_oh})
+            sess.run(train_op, feed_dict={x: X, y: Y_oh})
+        cost, Y_pred_oh = sess.run((loss, y_pred), feed_dict={x: X, y: Y_oh})
         print('Cost after {} iterations: {}'.format(1000, cost))
 
     Y_pred = np.argmax(Y_pred_oh, axis=1)

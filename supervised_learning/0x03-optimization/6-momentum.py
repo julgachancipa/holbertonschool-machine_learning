@@ -3,7 +3,6 @@
 Momentum Upgraded
 """
 import tensorflow as tf
-shuffle_data = __import__('2-shuffle_data').shuffle_data
 
 
 def create_momentum_op(loss, alpha, beta1):
