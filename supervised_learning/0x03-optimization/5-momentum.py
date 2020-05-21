@@ -3,7 +3,6 @@
 Momentum
 """
 import numpy as np
-shuffle_data = __import__('2-shuffle_data').shuffle_data
 
 
 def update_variables_momentum(alpha, beta1, var, grad, v):
