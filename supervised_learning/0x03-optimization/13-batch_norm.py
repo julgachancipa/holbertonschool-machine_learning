@@ -11,8 +11,8 @@ def batch_norm(Z, gamma, beta, epsilon):
     network using batch normalization
     """
     m = np.mean(Z, axis=0)
-    s = np.std(Z, axis=0)
-    Z_n = (Z - m) / (s + epsilon**(1/2))
+    v = np.var(Z, axis=0)
+    Z_n = (Z - m) / (v + epsilon)**(1/2)
     NZ = gamma * Z_n + beta
 
     return NZ
