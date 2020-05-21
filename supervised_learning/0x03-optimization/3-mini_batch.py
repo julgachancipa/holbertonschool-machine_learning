@@ -43,12 +43,11 @@ def train_mini_batch(X_train, Y_train, X_valid, Y_valid,
         train_op = tf.get_collection('train_op')[0]
 
         for e in range(epochs + 1):
-            x_t, y_t, loss_t, acc_t = sess.run((x, y, loss, accuracy),
-                                               feed_dict={x: X_train,
-                                                          y: Y_train})
+            x_t, y_t = shuffle_data(X_train, Y_train)
+            loss_t, acc_t = sess.run((loss, accuracy),
+                                     feed_dict={x: x_t, y: y_t})
             loss_v, acc_v = sess.run((loss, accuracy),
                                      feed_dict={x: X_valid, y: Y_valid})
-            x_t, y_t = shuffle_data(x_t, y_t)
             print('After {} epochs:'.format(e))
             print('\tTraining Cost: {}'.format(loss_t))
             print('\tTraining Accuracy: {}'.format(acc_t))
@@ -59,6 +58,8 @@ def train_mini_batch(X_train, Y_train, X_valid, Y_valid,
                 X_batch_t = get_batches(x_t, batch_size)
                 Y_batch_t = get_batches(y_t, batch_size)
                 for b in range(len(X_batch_t)):
+                    sess.run(train_op, feed_dict={x: X_batch_t[b],
+                                                  y: Y_batch_t[b]})
                     loss_t, acc_t = sess.run((loss, accuracy),
                                              feed_dict={x: X_batch_t[b],
                                                         y: Y_batch_t[b]})
@@ -66,8 +67,6 @@ def train_mini_batch(X_train, Y_train, X_valid, Y_valid,
                         print('\tStep {}:'.format(b))
                         print('\t\tCost: {}'.format(loss_t))
                         print('\t\tAccuracy: {}'.format(acc_t))
-                    sess.run(train_op, feed_dict={x: X_batch_t[b],
-                                                  y: Y_batch_t[b]})
 
         save_path = saver.save(sess, save_path)
     return save_path
