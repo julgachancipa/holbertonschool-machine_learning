@@ -2,8 +2,6 @@
 """
 Moving Average
 """
-import tensorflow as tf
-shuffle_data = __import__('2-shuffle_data').shuffle_data
 
 
 def moving_average(data, beta):
