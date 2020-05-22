@@ -141,8 +141,10 @@ def model(Data_train, Data_valid, layers, activations, alpha=0.001,
     loss = calculate_loss(y, y_pred)
     accuracy = calculate_accuracy(y, y_pred)
 
+    m = Data_train[0].shape[0]
+    batches = int(m / batch_size) + (m % batch_size > 0)
     global_step = tf.Variable(0, trainable=False)
-    alpha = learning_rate_decay(alpha, decay_rate, global_step, 10)
+    alpha = learning_rate_decay(alpha, decay_rate, global_step, batches)
 
     train_op = create_Adam_op(loss, alpha, beta1, beta2, epsilon)
 
