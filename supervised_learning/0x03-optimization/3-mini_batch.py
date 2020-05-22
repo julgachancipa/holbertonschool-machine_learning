@@ -54,12 +54,12 @@ def train_mini_batch(X_train, Y_train, X_valid, Y_valid,
             if e < epochs:
                 X_batch_t = get_batches(x_t, batch_size)
                 Y_batch_t = get_batches(y_t, batch_size)
-                for b in range(len(X_batch_t)):
-                    sess.run(train_op, feed_dict={x: X_batch_t[b],
-                                                  y: Y_batch_t[b]})
+                for b in range(1, len(X_batch_t) + 1):
+                    sess.run(train_op, feed_dict={x: X_batch_t[b - 1],
+                                                  y: Y_batch_t[b - 1]})
                     loss_t, acc_t = sess.run((loss, accuracy),
-                                             feed_dict={x: X_batch_t[b],
-                                                        y: Y_batch_t[b]})
+                                             feed_dict={x: X_batch_t[b - 1],
+                                                        y: Y_batch_t[b - 1]})
                     if not b % 100 and b > 0:
                         print('\tStep {}:'.format(b))
                         print('\t\tCost: {}'.format(loss_t))
