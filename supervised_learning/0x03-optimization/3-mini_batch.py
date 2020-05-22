@@ -13,14 +13,14 @@ def get_batches(a, batch_size):
     b_list = []
     i = 0
     m = a.shape[0]
-    # batches = int(m / batch_size) + (m % batch_size > 0)
-    batches = int(m / batch_size)
+    batches = int(m / batch_size) + (m % batch_size > 0)
+    # batches = int(m / batch_size)
     for b in range(batches):
-        """if b != batches-1:
+        if b != batches-1:
             b_list.append(a[i:(i+32)])
         else:
-            b_list.append(a[i:])"""
-        b_list.append(a[i:(i + 32)])
+            b_list.append(a[i:])
+        # b_list.append(a[i:(i + 32)])
         i += 32
     return b_list
 
