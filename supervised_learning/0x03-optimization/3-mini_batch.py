@@ -14,14 +14,12 @@ def get_batches(a, batch_size):
     i = 0
     m = a.shape[0]
     batches = int(m / batch_size) + (m % batch_size > 0)
-    # batches = int(m / batch_size)
     for b in range(batches):
         if b != batches-1:
-            b_list.append(a[i:(i+32)])
+            b_list.append(a[i:(i+batch_size)])
         else:
             b_list.append(a[i:])
-        # b_list.append(a[i:(i + 32)])
-        i += 32
+        i += batch_size
     return b_list
 
 
@@ -57,6 +55,8 @@ def train_mini_batch(X_train, Y_train, X_valid, Y_valid,
                 X_batch_t = get_batches(x_t, batch_size)
                 Y_batch_t = get_batches(y_t, batch_size)
                 for b in range(len(X_batch_t)):
+                    sess.run(train_op, feed_dict={x: X_batch_t[b],
+                                                  y: Y_batch_t[b]})
                     loss_t, acc_t = sess.run((loss, accuracy),
                                              feed_dict={x: X_batch_t[b],
                                                         y: Y_batch_t[b]})
@@ -64,8 +64,6 @@ def train_mini_batch(X_train, Y_train, X_valid, Y_valid,
                         print('\tStep {}:'.format(b))
                         print('\t\tCost: {}'.format(loss_t))
                         print('\t\tAccuracy: {}'.format(acc_t))
-                    sess.run(train_op, feed_dict={x: X_batch_t[b],
-                                                  y: Y_batch_t[b]})
 
         save_path = saver.save(sess, save_path)
     return save_path
