@@ -144,6 +144,8 @@ def model(Data_train, Data_valid, layers, activations, alpha=0.001,
     m = Data_train[0].shape[0]
     batches = int(m / batch_size) + (m % batch_size > 0)
     global_step = tf.Variable(0, trainable=False)
+    increment_global_step = tf.assign_add(global_step, 1,
+                                          name='increment_global_step')
     alpha = learning_rate_decay(alpha, decay_rate, global_step, batches)
 
     train_op = create_Adam_op(loss, alpha, beta1, beta2, epsilon)
@@ -181,8 +183,8 @@ def model(Data_train, Data_valid, layers, activations, alpha=0.001,
             X_batch_t = get_batches(x_t, batch_size)
             Y_batch_t = get_batches(y_t, batch_size)
             for b in range(1, len(X_batch_t) + 1):
-                sess.run(train_op, feed_dict={x: X_batch_t[b - 1],
-                                              y: Y_batch_t[b - 1]})
+                sess.run((increment_global_step, train_op),
+                         feed_dict={x: X_batch_t[b - 1], y: Y_batch_t[b - 1]})
                 loss_t, acc_t = sess.run((loss, accuracy),
                                          feed_dict={x: X_batch_t[b - 1],
                                                     y: Y_batch_t[b - 1]})
