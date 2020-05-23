@@ -27,7 +27,7 @@ def create_layer(prev, n, activation):
     return layer(prev)
 
 
-def create_batch_norm_layer(prev, n, activation):
+def create_batch_norm_layer(prev, n, activation, epsilon):
     """
     Creates a batch normalization layer for a neural
     """
@@ -40,12 +40,12 @@ def create_batch_norm_layer(prev, n, activation):
     beta = tf.Variable(tf.zeros([z.get_shape()[-1]]))
     gamma = tf.Variable(tf.ones([z.get_shape()[-1]]))
     z_n = tf.nn.batch_normalization(z, mean, variance,
-                                    beta, gamma, 1e-8)
+                                    beta, gamma, epsilon)
     y_pred = activation(z_n)
     return y_pred
 
 
-def forward_prop(x, layer_sizes=[], activations=[]):
+def forward_prop(x, layer_sizes=[], activations=[], epsilon=1e-8):
     """
     creates the forward propagation
     graph for the neural network
@@ -57,7 +57,7 @@ def forward_prop(x, layer_sizes=[], activations=[]):
         if i == len(layer_sizes) - 1:
             layer = create_layer(prev, n, activation)
         else:
-            layer = create_batch_norm_layer(prev, n, activation)
+            layer = create_batch_norm_layer(prev, n, activation, epsilon)
         prev = layer
     return layer
 
@@ -136,7 +136,7 @@ def model(Data_train, Data_valid, layers, activations, alpha=0.001,
     classes = Data_train[1].shape[1]
     x, y = create_placeholders(nx, classes)
 
-    y_pred = forward_prop(x, layers, activations)
+    y_pred = forward_prop(x, layers, activations, epsilon)
 
     loss = calculate_loss(y, y_pred)
     accuracy = calculate_accuracy(y, y_pred)
