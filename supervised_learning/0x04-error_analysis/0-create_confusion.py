@@ -14,9 +14,9 @@ def create_confusion_matrix(labels, logits):
 
     conf_mtx = np.zeros((classes, classes))
     for ex in range(m):
-        predicted = np.argmax(labels[ex])
-        actual = np.argmax(logits[ex])
+        actual = np.argmax(labels[ex])
+        predicted = np.argmax(logits[ex])
 
-        conf_mtx[predicted][actual] += 1
+        conf_mtx[actual][predicted] += 1
 
     return conf_mtx
