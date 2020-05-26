@@ -9,12 +9,12 @@ def precision(confusion):
     """
     Calculates the precision for each class in a confusion matrix
     """
-    sens = np.array([])
+    pre = np.array([])
 
-    for c in confusion.T:
-        True_Pos = np.amax(c)
-        predicted = np.sum(c)
+    for i in range(confusion.shape[0]):
+        TP = confusion[i][i]
+        predicted_yes = np.sum(confusion.T[i])
 
-        sens = np.append(sens, (True_Pos / predicted))
+        pre = np.append(pre, (TP / predicted_yes))
 
-    return sens
+    return pre

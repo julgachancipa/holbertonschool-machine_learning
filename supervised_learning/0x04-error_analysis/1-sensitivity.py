@@ -11,10 +11,10 @@ def sensitivity(confusion):
     """
     sens = np.array([])
 
-    for c in confusion:
-        True_Pos = np.amax(c)
-        actual = np.sum(c)
+    for i in range(confusion.shape[0]):
+        TP = confusion[i][i]
+        actual_yes = np.sum(confusion[i])
 
-        sens = np.append(sens, (True_Pos / actual))
+        sens = np.append(sens, (TP / actual_yes))
 
     return sens
