@@ -27,10 +27,10 @@ def l2_reg_gradient_descent(Y, weights, cache, alpha, lambtha, L):
             dZl = dAl
         else:
             dZl = dAl * gl_d
-        Al_1 = cache["A" + str(lay - 1)]
-        dWl = (1 / m) * np.matmul(dZl, Al_1.T)
-        dbl = (1 / m) * np.sum(dZl, axis=1, keepdims=True)
         Wl = weights["W" + str(lay)]
+        Al_1 = cache["A" + str(lay - 1)]
+        dWl = (1 / m) * np.matmul(dZl, Al_1.T) + ((lambtha / m) * Wl)
+        dbl = (1 / m) * np.sum(dZl, axis=1, keepdims=True)
         dAl = np.matmul(Wl.T, dZl)
 
         kW = "W" + str(lay)
