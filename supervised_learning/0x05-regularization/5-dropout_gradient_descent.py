@@ -27,10 +27,10 @@ def dropout_gradient_descent(Y, weights, cache, alpha, keep_prob, L):
             dZl = dAl
         else:
             dZl = dAl * gl_d
-            dZl *= cache["D" + str(lay)]
+            dZl *= (cache["D" + str(lay)] / keep_prob)
         Wl = weights["W" + str(lay)]
         Al_1 = cache["A" + str(lay - 1)]
-        dWl = ((1 / m) * np.matmul(dZl, Al_1.T)) / keep_prob
+        dWl = (1 / m) * np.matmul(dZl, Al_1.T)
         dbl = (1 / m) * np.sum(dZl, axis=1, keepdims=True)
         dAl = np.matmul(Wl.T, dZl)
 
