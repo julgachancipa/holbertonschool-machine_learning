@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-Test
-"""
+"""Test"""
 import tensorflow.keras as K
 
 
