@@ -45,7 +45,8 @@ def train_model(network, data, labels, batch_size, epochs,
     if learning_rate_decay and validation_data:
         callbacks += [K.callbacks.LearningRateScheduler(schedule, verbose=1)]
     if save_best and validation_data:
-        callbacks += [K.callbacks.ModelCheckpoint(filepath, mode='min')]
+        callbacks += [K.callbacks.ModelCheckpoint(filepath, mode='min',
+                                                  save_best_only=True)]
     if len(callbacks) < 1:
         callbacks = None
     network.fit(data, labels, epochs=epochs, batch_size=batch_size,
