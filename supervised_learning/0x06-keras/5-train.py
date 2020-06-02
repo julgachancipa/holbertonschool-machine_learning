@@ -19,9 +19,10 @@ def train_model(network, data, labels, batch_size, epochs,
     batches every epoch
     :param validation_data: data to valid
     :return: History object generated after training the model
-    """
+
     if type(validation_data) is not tuple:
         validation_data = None
+    """
     network.fit(data, labels, epochs=epochs, batch_size=batch_size,
                 verbose=verbose, shuffle=shuffle,
                 validation_data=validation_data)
