@@ -29,5 +29,5 @@ def build_model(nx, layers, activations, lambtha, keep_prob):
                                      l2(lambtha),
                                      activation=activations[l]))
         if l is not L - 1:
-            model.add(K.layers.Dropout(keep_prob))
+            model.add(K.layers.Dropout(1 - keep_prob))
     return model
