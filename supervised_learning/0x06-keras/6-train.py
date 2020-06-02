@@ -26,6 +26,8 @@ def train_model(network, data, labels, batch_size, epochs,
     :param patience: patience used for early stopping
     :return: History object generated after training the model
     """
+    if type(validation_data) is not tuple:
+        validation_data = None
     if early_stopping and validation_data:
         callbacks = [K.callbacks.EarlyStopping(patience=patience)]
     else:
