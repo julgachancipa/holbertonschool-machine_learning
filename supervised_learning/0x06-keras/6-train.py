@@ -27,11 +27,11 @@ def train_model(network, data, labels, batch_size, epochs,
     :return: History object generated after training the model
     """
     if early_stopping and validation_data:
-        callbacks = K.callbacks.EarlyStopping(patience=patience)
+        callbacks = [K.callbacks.EarlyStopping(patience=patience)]
     else:
         callbacks = None
     network.fit(data, labels, epochs=epochs, batch_size=batch_size,
                 verbose=verbose, shuffle=shuffle,
                 validation_data=validation_data,
-                callbacks=[callbacks])
+                callbacks=callbacks)
     return network.history
