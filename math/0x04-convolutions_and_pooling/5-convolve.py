@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """
-Convolution with Channels
+Multiple Kernels
 """
 import numpy as np
 
 
-def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
+def convolve(images, kernels, padding='same', stride=(1, 1)):
     """
-    Performs a convolution on images with channels
+    Performs a convolution on images using multiple kernels
     :param images: contain multiple images
-    :param kernel: contain the kernel for the convolution
+    :param kernels: contain the kernels for the convolution
     :param padding: padding
     :param stride: tuple of (sh, sw)
     :return: numpy.ndarray containing the convolved images
@@ -26,20 +26,23 @@ def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
     ih = images.shape[1]
     iw = images.shape[2]
     c = images.shape[3]
-    kh = kernel.shape[0]
-    kw = kernel.shape[1]
+    kh = kernels.shape[0]
+    kw = kernels.shape[1]
+    nk = kernels.shape[2]
     hc = (ih - kh + 1)
     wc = (iw - kw + 1)
 
-    conv = np.zeros((m, hc // stride[0], wc // stride[1]))
+    conv = np.zeros((m, hc // stride[0], wc // stride[1], nk))
 
     i = 0
     for h in range(0, hc, stride[0]):
         j = 0
         for w in range(0, wc, stride[1]):
-            aux = np.multiply(images[:, h:h + kh, w:w + kw], kernel)
-            aux = np.reshape(aux, (m, kh * kw * c))
-            conv[:, i, j] = np.sum(aux, axis=1)
+            for k in range(nk):
+                aux = np.multiply(images[:, h:h + kh, w:w + kw],
+                                  kernels[:, :, :, k])
+                aux = np.reshape(aux, (m, kh * kw * c))
+                conv[:, i, j, k] = np.sum(aux, axis=1)
             j += 1
         i += 1
     return conv
