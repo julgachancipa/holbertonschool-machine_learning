@@ -32,7 +32,7 @@ def convolve(images, kernels, padding='same', stride=(1, 1)):
     hc = (ih - kh + 1)
     wc = (iw - kw + 1)
 
-    conv = np.zeros((m, hc // stride[0], wc // stride[1], nk))
+    conv = np.zeros((m, hc // stride[0], wc // stride[1], c))
 
     i = 0
     for h in range(0, hc, stride[0]):
