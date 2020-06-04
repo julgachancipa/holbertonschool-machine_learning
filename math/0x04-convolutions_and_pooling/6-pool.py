@@ -29,7 +29,9 @@ def pool(images, kernel_shape, stride, mode='max'):
         j = 0
         for w in range(0, wc+1, stride[1]):
             if mode is 'max':
-                aux = images[:, h:h + kh, w:w + kw].max
+                aux = np.reshape(images[:, h:h + kh, w:w + kw, :],
+                                 (m, kw * kh, c))
+                aux = np.amax(aux, axis=1)
             elif mode is 'avg':
                 aux = np.reshape(images[:, h:h + kh, w:w + kw, :],
                                  (m, kw*kh, c))
