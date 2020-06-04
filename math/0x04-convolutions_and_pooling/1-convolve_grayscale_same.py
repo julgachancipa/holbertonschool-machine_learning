@@ -12,8 +12,10 @@ def convolve_grayscale_same(images, kernel):
     :param kernel: kernel for the convolution
     :return: numpy.ndarray containing the convolved images
     """
-    images = np.pad(images, pad_width=((0, 0), (1, 1), (1, 1)),
-                    mode='constant')
+    pad_h = kernel.shape[0] // 2
+    pad_w = kernel.shape[1] // 2
+    images = np.pad(images, pad_width=((0, 0), (pad_h, pad_h), (pad_w, pad_w)),
+                    mode='constant', constant_values=0)
     m = images.shape[0]
     ih = images.shape[1]
     iw = images.shape[2]
