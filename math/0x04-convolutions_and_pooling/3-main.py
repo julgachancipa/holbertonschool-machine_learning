@@ -10,7 +10,7 @@ if __name__ == '__main__':
     dataset = np.load('../../supervised_learning/data/MNIST.npz')
     images = dataset['X_train']
     print(images.shape)
-    kernel = np.array([[1, 0, -1], [1, 0, -1], [1, 0, -1]])
+    kernel = np.array([[1, 0], [1, 0]])
     images_conv = convolve_grayscale(images, kernel, padding='same',
                                      stride=(2, 2))
     print(images_conv.shape)

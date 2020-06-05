@@ -19,7 +19,7 @@ if __name__ == '__main__':
                        [[[0, 1, -1], [0, 1, -1], [0, 1, -1]],
                         [[-1, 0, -1], [-1, 0, -1], [-1, 0, -1]],
                         [[0, -1, -1], [0, -1, -1], [0, -1, -1]]]])
-    images_conv = convolve(images, kernels, padding=(2, 5))
+    images_conv = convolve(images, kernels, padding='valid')
     print(images_conv.shape)
 
     plt.imshow(images[0])

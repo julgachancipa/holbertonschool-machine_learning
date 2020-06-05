@@ -14,35 +14,40 @@ def convolve(images, kernels, padding='same', stride=(1, 1)):
     :param stride: tuple of (sh, sw)
     :return: numpy.ndarray containing the convolved images
     """
-    if padding == 'same':
-        images = np.pad(images, pad_width=((0, 0), (1, 1), (1, 1), (0, 0)),
-                        mode='constant', constant_values=0)
-    elif padding != 'valid':
-        ph = padding[0]
-        pw = padding[1]
-        images = np.pad(images, pad_width=((0, 0), (ph, ph), (pw, pw), (0, 0)),
-                        mode='constant', constant_values=0)
     m = images.shape[0]
-    ih = images.shape[1]
-    iw = images.shape[2]
+    h = images.shape[1]
+    w = images.shape[2]
     c = images.shape[3]
     kh = kernels.shape[0]
     kw = kernels.shape[1]
     nk = kernels.shape[2]
-    hc = (ih - kh + 1)
-    wc = (iw - kw + 1)
+    sh = stride[0]
+    sw = stride[1]
 
-    conv = np.zeros((m, hc // stride[0], wc // stride[1], c))
+    if padding == 'same':
+        ph = max((h - 1) * sh + kh - h, 0)
+        pt = int(np.ceil(ph / 2))
+        pb = pt
+        pw = max((w - 1) * sw + kw - w, 0)
+        pl = int(np.ceil(pw / 2))
+        pr = pl
+    elif padding == 'valid':
+        pt, pb, pl, pr = 0, 0, 0, 0
+    else:
+        pt, pb = padding[0], padding[0]
+        pl, pr = padding[1], padding[1]
 
-    i = 0
-    for h in range(0, hc, stride[0]):
-        j = 0
-        for w in range(0, wc, stride[1]):
+    oh = ((h - kh + pt + pb) // sh) + 1
+    ow = ((w - kw + pl + pr) // sw) + 1
+
+    images = np.pad(images, pad_width=((0, 0), (pt, pb), (pl, pr), (0, 0)),
+                    mode='constant', constant_values=0)
+
+    conv = np.zeros((m, oh, ow, c))
+    for i in range(oh):
+        for j in range(ow):
             for k in range(nk):
-                aux = np.multiply(images[:, h:h + kh, w:w + kw],
-                                  kernels[:, :, :, k])
-                aux = np.reshape(aux, (m, kh * kw * c))
-                conv[:, i, j, k] = np.sum(aux, axis=1)
-            j += 1
-        i += 1
+                aux = images[:, i * sh:i * sh + kh, j * sw:j * sw + kw] \
+                      * kernels[:, :, :, k]
+                conv[:, i, j, k] = np.sum(aux, axis=(1, 2, 3))
     return conv
