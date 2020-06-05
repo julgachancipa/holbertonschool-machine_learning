@@ -23,21 +23,19 @@ def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
     sw = stride[1]
 
     if padding == 'same':
-        # ph = int(((h - 1) * sh + kh - h) / 2) + 1
-        # pw = int(((w - 1) * sw + kw - w) / 2) + 1
-        ph = max((h - 1) * stride[0] + kh - h, 0)
-        pt = ph // 2
-        pb = ph - pt
-        pw = max((w - 1) * stride[1] + kw - w, 0)
-        pl = pw // 2
-        pr = pw - pl
+        ph = int(((h - 1) * sh + kh - h) / 2) + 1
+        pw = int(((w - 1) * sw + kw - w) / 2) + 1
+        pt, pb = ph, ph
+        pl, pr = pw, pw
+        # ph = max((h - 1) * sh + kh - h, 0)
+        # pt = ph // 2
+        # pb = ph - pt
+        # pw = max((w - 1) * sw + kw - w, 0)
+        # pl = pw // 2
+        # pr = pw - pl
     elif padding == 'valid':
         pt, pb, pl, pr = 0, 0, 0, 0
-        # ph = 0
-        # pw = 0
     else:
-        # ph = padding[0]
-        # pw = padding[1]
         pt, pb = padding[0], padding[0]
         pl, pr = padding[1], padding[1]
 
