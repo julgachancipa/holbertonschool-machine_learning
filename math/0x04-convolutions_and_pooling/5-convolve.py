@@ -44,9 +44,9 @@ def convolve(images, kernels, padding='same', stride=(1, 1)):
                     mode='constant', constant_values=0)
 
     conv = np.zeros((m, oh, ow, c))
-    for i in range(oh):
-        for j in range(ow):
-            for k in range(nk):
+    for k in range(nk):
+        for i in range(oh):
+            for j in range(ow):
                 aux = images[:, i * sh:i * sh + kh, j * sw:j * sw + kw] \
                       * kernels[:, :, :, k]
                 conv[:, i, j, k] = np.sum(aux, axis=(1, 2, 3))
