@@ -45,6 +45,7 @@ def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
         ow = int(np.ceil((w - kw + 1) / sw))
 
     else:
+        print('oli')
         ph = padding[0]
         pw = padding[1]
         images = np.pad(images, pad_width=((0, 0), (ph, ph), (pw, pw)),
