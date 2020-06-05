@@ -14,32 +14,41 @@ def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
     :param stride: tuple of (sh, sw)
     :return: numpy.ndarray containing the convolved images
     """
-    if padding == 'same':
-        images = np.pad(images, pad_width=((0, 0), (1, 1), (1, 1), (0, 0)),
-                        mode='constant', constant_values=0)
-    elif padding != 'valid':
-        ph = padding[0]
-        pw = padding[1]
-        images = np.pad(images, pad_width=((0, 0), (ph, ph), (pw, pw), (0, 0)),
-                        mode='constant', constant_values=0)
     m = images.shape[0]
-    ih = images.shape[1]
-    iw = images.shape[2]
-    c = images.shape[3]
+    h = images.shape[1]
+    w = images.shape[2]
     kh = kernel.shape[0]
     kw = kernel.shape[1]
-    hc = (ih - kh + 1)
-    wc = (iw - kw + 1)
+    sh = stride[0]
+    sw = stride[1]
 
-    conv = np.zeros((m, hc // stride[0], wc // stride[1]))
+    if padding == 'same':
+        ph = int(((h - 1) * sh + kh - h) / 2) + 1
+        pw = int(((w - 1) * sw + kw - w) / 2) + 1
+        images = np.pad(images, pad_width=((0, 0), (ph, ph), (pw, pw)),
+                        mode='constant', constant_values=0)
+        oh = h
+        ow = w
 
-    i = 0
-    for h in range(0, hc, stride[0]):
-        j = 0
-        for w in range(0, wc, stride[1]):
-            aux = np.multiply(images[:, h:h + kh, w:w + kw], kernel)
-            aux = np.reshape(aux, (m, kh * kw * c))
-            conv[:, i, j] = np.sum(aux, axis=1)
-            j += 1
-        i += 1
+    elif padding == 'valid':
+        oh = int(np.ceil((h - kh + 1) / sh))
+        ow = int(np.ceil((w - kw + 1) / sw))
+
+    else:
+        ph = padding[0]
+        pw = padding[1]
+        images = np.pad(images, pad_width=((0, 0), (ph, ph), (pw, pw)),
+                        mode='constant', constant_values=0)
+        oh = ((h - kh + 2 * ph) // sh) + 1
+        ow = ((w - kw + 2 * pw) // sw) + 1
+
+    conv = np.zeros((m, oh, ow))
+    row = 0
+    for i in range(oh):
+        col = 0
+        for j in range(ow):
+            aux = images[:, i * sh:i * sh + kh, j * sw:j * sw + kw] * kernel
+            conv[:, row, col] = np.sum(aux, axis=(1, 2, 3))
+            col += 1
+        row += 1
     return conv
