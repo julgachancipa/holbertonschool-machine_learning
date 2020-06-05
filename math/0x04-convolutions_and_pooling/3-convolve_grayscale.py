@@ -23,33 +23,36 @@ def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
     sw = stride[1]
 
     if padding == 'same':
-        oh = np.ceil(h/sh)
-        ow = np.ceil(w/sw)
-        ph = max((oh - 1) * sh + kh, 0)
-        pw = max((ow - 1) * sw + kw, 0)
-        ptb = np.floor(ph/2)
-        plr = np.floor(pw/2)
-        ptb = kh // 2
-        plr = kw // 2
-        images = np.pad(images, pad_width=((0, 0), (ptb, ptb), (plr, plr)),
+        oh = int(np.ceil(h/sh))
+        ow = int(np.ceil(w/sw))
+        ph = max((oh - 1) * sh + kh - h, 0)
+        pw = max((ow - 1) * sw + kw - w, 0)
+        ph = int(np.floor(ph/2))
+        pw = int(np.floor(pw/2))
+        images = np.pad(images, pad_width=((0, 0), (ph, ph), (pw, pw)),
                         mode='constant', constant_values=0)
-    elif padding != 'valid':
+        hc = int(np.ceil(h / sh))
+        wc = int(np.ceil(w / sw))
+
+    elif padding == 'valid':
+        hc = (h - kh + 1) // sh
+        wc = (w - kw + 1) // sw
+
+    else:
         ph = padding[0]
         pw = padding[1]
         images = np.pad(images, pad_width=((0, 0), (ph, ph), (pw, pw)),
                         mode='constant', constant_values=0)
-    hc = (h - kh + 1)
-    wc = (w - kw + 1)
+        hc = ((h - kh + 2 * ph) // sh) + 1
+        wc = ((w - kw + 2 * pw) // sw) + 1
 
-    conv = np.zeros((m, hc // stride[0], wc // stride[1]))
-
-    i = 0
-    for h_i in range(0, hc, stride[0]):
-        j = 0
-        for w_i in range(0, wc, stride[1]):
-            aux = np.multiply(images[:, h_i:h_i + kh, w_i:w_i + kw], kernel)
-            aux = np.reshape(aux, (m, kh * kw))
-            conv[:, i, j] = np.sum(aux, axis=1)
-            j += 1
-        i += 1
+    conv = np.zeros((m, hc, wc))
+    row = 0
+    for i in range(0, h - kh + 1, sh):
+        col = 0
+        for j in range(0, w - kw + 1, sw):
+            aux = np.multiply(images[:, i:i + kh, j:j + kw], kernel)
+            conv[:, row, col] = np.sum(aux, axis=(1, 2))
+            col += 1
+        row += 1
     return conv

@@ -11,7 +11,7 @@ if __name__ == '__main__':
     images = dataset['X_train']
     print(images.shape)
     kernel = np.array([[1, 0, -1], [1, 0, -1], [1, 0, -1]])
-    images_conv = convolve_grayscale(images, kernel, padding='valid',
+    images_conv = convolve_grayscale(images, kernel, padding=(1, 5),
                                      stride=(2, 2))
     print(images_conv.shape)
 
