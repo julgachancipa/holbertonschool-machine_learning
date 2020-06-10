@@ -34,10 +34,10 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
         sw is the stride for the width
     :return: partial derivatives with respect to the previous layer (dA_prev)
     """
-    print('W ', W.shape)
-    print('b ', b.shape)
-    print('dZ ', dZ.shape)
-    print('A_p ', A_prev.shape)
+    # print('W ', W.shape)
+    # print('b ', b.shape)
+    # print('dZ ', dZ.shape)
+    # print('A_p ', A_prev.shape)
 
     m, h_new, w_new, c_new = dZ.shape
     m, h_prev, w_prev, c_prev = A_prev.shape
@@ -46,11 +46,14 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
 
     dW = np.zeros(W.shape)
 
-    for i in range(kh):
-        for j in range(kw):
-            A_p = A_prev[:, i * sh:i * sh + h_new, j * sw:j * sw + w_new]
-            aux = A_p * dZ
-            dW[i, j] = np.sum(aux, axis=(0, 1, 2))
+    for cp in range(c_prev):
+        for i in range(kh):
+            for j in range(kw):
+                A_p = A_prev[:, i:i + h_new, j:j + w_new, cp]
+                for cn in range(c_new):
+                    aux = A_p * dZ[:, :, :, cn]
+                    dW[i, j, cp, cn] = np.sum(aux, axis=(0, 1, 2))
+
     db = np.sum(dZ, axis=(0, 1, 2))
 
     if padding == 'same':
@@ -70,12 +73,12 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
                     mode='constant', constant_values=0)
 
     dA_prev = np.zeros((m, ih, iw, c_prev))
-    for c in range(c_prev):
+    for cp in range(c_prev):
         for i in range(ih):
             for j in range(iw):
                 dZ = new_dZ[:, i * sh:i * sh + kh, j * sw:j * sw + kw]
-                aux = dZ * W[:, :, c, :]
-                dA_prev[:, i, j, c] = np.sum(aux, axis=(1, 2, 3))
+                aux = dZ * W[:, :, cp, :]
+                dA_prev[:, i, j, cp] = np.sum(aux, axis=(1, 2, 3))
 
     # print('>', dA_prev.shape)
     return dA_prev, dW, db
