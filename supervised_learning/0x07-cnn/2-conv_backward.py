@@ -78,7 +78,7 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
             for j in range(iw):
                 dZ = new_dZ[:, i * sh:i * sh + kh, j * sw:j * sw + kw]
                 aux = dZ * W[:, :, cp, :]
-                dA_prev[:, i, j, cp] = np.sum(aux, axis=(1, 2, 3))
+                dA_prev[:, i, j, cp] = np.sum(aux)
 
     # print('>', dA_prev.shape)
     return dA_prev, dW, db
