@@ -34,51 +34,34 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
         sw is the stride for the width
     :return: partial derivatives with respect to the previous layer (dA_prev)
     """
-    # print('W ', W.shape)
-    # print('b ', b.shape)
-    # print('dZ ', dZ.shape)
-    # print('A_p ', A_prev.shape)
-
     m, h_new, w_new, c_new = dZ.shape
     m, h_prev, w_prev, c_prev = A_prev.shape
     kh, kw, c_prev, c_new = W.shape
     sh, sw = stride
 
-    dW = np.zeros(W.shape)
-
-    for cp in range(c_prev):
-        for i in range(kh):
-            for j in range(kw):
-                A_p = A_prev[:, i:i + h_new, j:j + w_new, cp]
-                for cn in range(c_new):
-                    aux = A_p * dZ[:, :, :, cn]
-                    dW[i, j, cp, cn] = np.sum(aux, axis=(0, 1, 2))
-
-    db = np.sum(dZ, axis=(0, 1, 2))
-
-    if padding == 'same':
-        ph = max((h_prev - 1) * sh + kh - h_prev, 0)
-        ph = int(np.ceil(ph / 2))
-        pw = max((w_prev - 1) * sw + kw - w_prev, 0)
-        pw = int(np.ceil(pw / 2))
-    elif padding == 'valid':
-        ph, pw = 0, 0
+    if padding is 'same':
+        ph = int(np.ceil(max((h_prev - 1) * sh + kh - h_prev, 0) / 2))
+        pw = int(np.ceil(max((w_prev - 1) * sw + kw - w_prev, 0) / 2))
+        A_prev = np.pad(A_prev, pad_width=((0, 0), (ph, ph), (pw, pw), (0, 0)),
+                        mode='constant', constant_values=0)
     else:
-        ph, pw = padding[0], padding[1]
+        ph, pw = 0, 0
 
-    ih = ((h_new - kh + (2 * ph)) // sh) + 1
-    iw = ((w_new - kw + (2 * pw)) // sw) + 1
+    dW = np.zeros(W.shape)
+    dA_prev = np.zeros(A_prev.shape)
+    db = np.zeros(b.shape)
+    db[:, :, 0, :] = np.sum(dZ, axis=(0, 1, 2))
 
-    new_dZ = np.pad(dZ, pad_width=((0, 0), (ph, ph), (pw, pw), (0, 0)),
-                    mode='constant', constant_values=0)
+    for img in range(m):
+        for i in range(h_new):
+            for j in range(w_new):
+                for cn in range(c_new):
+                    tmp_W = W[:, :, :, cn]
+                    tmp_dZ = dZ[img, i, j, cn]
+                    dA_prev[img, i * sh:i * sh + kh, j * sw:j * sw + kw] += \
+                        (tmp_W * tmp_dZ)
+                    dW[:, :, :, cn] += (A_prev[img, i * sh:i * sh + kh,
+                                        j * sw:j * sw + kw] * tmp_dZ)
 
-    dA_prev = np.zeros((m, ih, iw, c_prev))
-    for cp in range(c_prev):
-        for i in range(ih):
-            for j in range(iw):
-                dZ = new_dZ[:, i * sh:i * sh + kh, j * sw:j * sw + kw]
-                aux = dZ * W[:, :, cp, :]
-                dA_prev[:, i, j, cp] = np.sum(aux)
-
-    # print('>', dA_prev.shape)
+    dA_prev = dA_prev[:, ph:-ph, pw:-pw, :]
     return dA_prev, dW, db
