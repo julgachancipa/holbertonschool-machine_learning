@@ -11,9 +11,13 @@ def lenet5(X):
     :param X:
     :return:
     """
-    conv_1 = K.layers.Conv2D(6, 5, padding='same')(X)
+    conv_1 = K.layers.Conv2D(6, 5, padding='same',
+                             activation='relu',
+                             kernel_initializer='he_normal')(X)
     pool_1 = K.layers.MaxPool2D(2, 2)(conv_1)
-    conv_2 = K.layers.Conv2D(16, 5, padding='valid')(pool_1)
+    conv_2 = K.layers.Conv2D(16, 5, padding='valid',
+                             activation='relu',
+                             kernel_initializer='he_normal')(pool_1)
     pool_2 = K.layers.MaxPool2D(2, 2)(conv_2)
     flat = K.layers.Flatten()(pool_2)
     f_con_1 = K.layers.Dense(120, input_shape=X.shape,
