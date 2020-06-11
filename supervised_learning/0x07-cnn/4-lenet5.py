@@ -21,21 +21,24 @@ def lenet5(x, y):
         a tensor for the loss of the netowrk
         a tensor for the accuracy of the network
     """
-    conv_1 = tf.layers.Conv2D(6, 5, padding='same')(x)
+    k_init = tf.contrib.layers.variance_scaling_initializer()
+
+    conv_1 = tf.layers.Conv2D(6, 5, padding='same',
+                              activation=tf.nn.relu,
+                              kernel_initializer=k_init)(x)
     pool_1 = tf.layers.MaxPooling2D(2, 2)(conv_1)
-    conv_2 = tf.layers.Conv2D(16, 5, padding='valid')(pool_1)
+    conv_2 = tf.layers.Conv2D(16, 5, padding='valid',
+                              activation=tf.nn.relu,
+                              kernel_initializer=k_init)(pool_1)
     pool_2 = tf.layers.MaxPooling2D(2, 2)(conv_2)
     flat = tf.layers.Flatten()(pool_2)
-    k_initializer = tf.contrib.layers.variance_scaling_initializer()
-    fully_1 = tf.layers.dense(flat, units=120,
-                              kernel_initializer=k_initializer,
-                              activation='relu')
-    fully_2 = tf.layers.dense(fully_1, units=84,
-                              kernel_initializer=k_initializer,
-                              activation='relu')
-    y_pred = tf.layers.dense(fully_2, units=10,
-                             kernel_initializer=k_initializer,
-                             activation=tf.nn.softmax)
+    fully_1 = tf.layers.Dense(120,
+                              activation=tf.nn.relu,
+                              kernel_initializer=k_init)(flat)
+    fully_2 = tf.layers.Dense(84,
+                              kernel_initializer=k_init,
+                              activation=tf.nn.relu)(fully_1)
+    y_pred = tf.layers.Dense(10, kernel_initializer=k_init)(fully_2)
     # Calculate loss
     loss = tf.losses.softmax_cross_entropy(onehot_labels=y, logits=y_pred)
 
@@ -45,5 +48,5 @@ def lenet5(x, y):
 
     optimizer = tf.train.AdamOptimizer()
     train = optimizer.minimize(loss)
-
-    return y_pred, train, loss, accuracy
+    y_out = tf.nn.softmax(y_pred)
+    return y_out, train, loss, accuracy
