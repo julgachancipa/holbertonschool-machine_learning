@@ -58,7 +58,6 @@ class Yolo():
         boxes, box_confidences, box_class_probs = [], [], []
 
         for i in range(len(outputs)):
-            ih, iw = image_size
             t_xy, t_wh, objectness, classes = np.split(outputs[i], (2, 4, 5),
                                                        axis=-1)
 
@@ -178,8 +177,7 @@ class Yolo():
         the processed box class probabilities for each output, respectively
         :return:
         """
-        v_boxes, v_labels, v_scores = list(), list(), list()
-        # enumerate all boxes
+        v_boxes, v_labels, v_scores = [], [], []
         for i in range(len(boxes)):
             a, b, c, d = boxes[i].shape
             resha = boxes[i].reshape(a * b * c, d)
@@ -187,18 +185,13 @@ class Yolo():
             resha_conf = box_confidences[i].reshape(a * b * c, d)
             a, b, c, d = box_class_probs[i].shape
             resha_probs = box_class_probs[i].reshape(a * b * c, d)
-            # print(resha)
             for box in range(len(resha)):
-                # enumerate all possible labels
-                # check if the threshold for this label is high enough
-                if resha_conf[box] > self.class_t:
-                    v_boxes.append(list(resha[box]))
-                    pos = np.argmax(resha_probs[box])
-                    v_labels.append(pos)
-                    mul = resha_probs[box][pos] * resha_conf[box]
-                    v_scores.append(mul.item(0))
-                    # print(resha_probs[box][:30])
-                    # break;
-                    # print(resha_probs[pos])
-                    # don't break, many labels may trigger for one box
-        return v_boxes, v_labels, v_scores
+                pos = np.argmax(resha_probs[box])
+                score = resha_probs[box][pos] * resha_conf[box]
+                if score > self.class_t:
+                    v_boxes = np.concatenate([v_boxes, resha[box]])
+                    v_labels = np.concatenate([v_labels, [pos]], axis=-1)
+                    v_scores = np.concatenate([v_scores, score])
+        rows = v_boxes.shape[0] // 4
+        v_boxes = v_boxes.reshape(rows, 4)
+        return v_boxes, v_labels.astype(int), v_scores
