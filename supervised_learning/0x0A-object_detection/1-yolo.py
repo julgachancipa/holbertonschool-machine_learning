@@ -147,7 +147,7 @@ class Yolo():
             # it does not make sense for the box to have a negative width or
             # height. That’s why
             # we take the exponent of the predicted number."
-            b_wh = (np.exp(t_wh) / 416) * self.anchors[i]
+            b_wh = (np.exp(t_wh) / self.model.input_1.shape) * self.anchors[i]
 
             bx = b_xy[:, :, :, :1]
             by = b_xy[:, :, :, 1:2]
@@ -161,4 +161,4 @@ class Yolo():
 
             boxes.append(np.concatenate([x1, y1, x2, y2], axis=-1))
 
-        return (boxes, box_confidences, box_class_probs)
+        return boxes, box_confidences, box_class_probs
