@@ -22,8 +22,9 @@ class Yolo():
         suppression
         :param anchors: is a numpy.ndarray of shape (outputs, anchor_boxes, 2)
         containing all of the anchor boxes:
-            outputs is the number of outputs (predictions) made by the Darknet model
-            anchor_boxes is the number of anchor boxes used for each prediction
+            outputs is the number of outputs (predictions) made by the Darknet
+            model anchor_boxes is the number of anchor boxes used for each
+            prediction
             2 => [anchor_box_width, anchor_box_height]
         """
         self.model = K.models.load_model(model_path)
