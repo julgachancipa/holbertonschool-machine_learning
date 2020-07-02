@@ -147,7 +147,8 @@ class Yolo():
             # it does not make sense for the box to have a negative width or
             # height. That’s why
             # we take the exponent of the predicted number."
-            b_wh = (np.exp(t_wh) / self.model.input_1.shape) * self.anchors[i]
+            inp = self.model.input_shape[1:3]
+            b_wh = (np.exp(t_wh) / inp) * self.anchors[i]
 
             bx = b_xy[:, :, :, :1]
             by = b_xy[:, :, :, 1:2]
