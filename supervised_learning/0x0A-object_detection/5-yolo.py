@@ -205,3 +205,16 @@ class Yolo():
                   for file in glob.glob(folder_path + '/*.jpg')]
         paths = [file for file in glob.glob(folder_path + '/*.jpg')]
         return images, paths
+
+    def preprocess_images(self, images):
+        """ Prepocees images to posterior use with darknet"""
+        resized = []
+        dims = self.model.input_shape[1:3]
+        # dims = (416, 416)
+        for img in images:
+            resized.append(cv2.resize(img, dims,
+                                      interpolation=cv2.INTER_CUBIC) / 255)
+        shapes = []
+        for img in images:
+            shapes.append(img.shape[:2])
+        return np.array(resized), np.array(shapes)
