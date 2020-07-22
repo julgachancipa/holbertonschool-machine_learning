@@ -40,6 +40,12 @@ def determinant(matrix):
 
 
 def getMatrixMinor(m, i, j):
+    """
+    :param m: matrix
+    :param i: x coord.
+    :param j: y coord.
+    :return: minor of the position
+    """
     return determinant([row[:j] + row[j+1:] for row in (m[:i]+m[i+1:])])
 
 
