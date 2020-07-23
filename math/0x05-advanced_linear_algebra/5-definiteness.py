@@ -20,6 +20,11 @@ def definiteness(matrix):
     n, m = matrix.shape
     if n is not m:
         return None
+    if not np.linalg.eig(matrix):
+        return None
+    if not (matrix.transpose() == matrix).all():
+        return None
+
     w, v = np.linalg.eig(matrix)
 
     pos, neg, zer = 0, 0, 0
