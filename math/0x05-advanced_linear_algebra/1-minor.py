@@ -12,7 +12,7 @@ def determinant(matrix):
     """
     if type(matrix) is not list or len(matrix) is 0:
         raise TypeError('matrix must be a list of lists')
-    if type(matrix[0]) is not list:
+    if not all(isinstance(row, list) for row in matrix):
         raise TypeError('matrix must be a list of lists')
     if len(matrix) is 1 and len(matrix[0]) is 0:
         return 1
@@ -59,8 +59,8 @@ def minor(matrix):
         raise TypeError('matrix must be a list of lists')
     if type(matrix[0]) is not list:
         raise TypeError('matrix must be a list of lists')
-    if len(matrix) is not len(matrix[0]):
-        raise ValueError('matrix must be a non-empty square matrix')
+    if not all(isinstance(row, list) for row in matrix):
+        raise TypeError('matrix must be a list of lists')
     if len(matrix) is 1 and len(matrix[0]) is 1:
         return [[1]]
     minors = [x[:] for x in matrix]
