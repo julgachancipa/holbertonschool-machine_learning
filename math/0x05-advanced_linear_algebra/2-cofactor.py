@@ -59,7 +59,9 @@ def minor(matrix):
         raise TypeError('matrix must be a list of lists')
     if not all(isinstance(row, list) for row in matrix):
         raise TypeError('matrix must be a list of lists')
-    if len(matrix) is not len(matrix[0]):
+    if matrix is [[]]:
+        raise ValueError('matrix must be a non-empty square matrix')
+    if not all(len(matrix) == col for col in [len(row) for row in matrix]):
         raise ValueError('matrix must be a non-empty square matrix')
     if len(matrix) is 1 and len(matrix[0]) is 1:
         return [[1]]
@@ -76,6 +78,14 @@ def cofactor(matrix):
     :param matrix: list of lists whose cofactor matrix should be calculated
     :return: cofactor matrix of matrix
     """
+    if type(matrix) is not list or len(matrix) is 0:
+        raise TypeError('matrix must be a list of lists')
+    if not all(isinstance(row, list) for row in matrix):
+        raise TypeError('matrix must be a list of lists')
+    if matrix is [[]]:
+        raise ValueError('matrix must be a non-empty square matrix')
+    if not all(len(matrix) == col for col in [len(row) for row in matrix]):
+        raise ValueError('matrix must be a non-empty square matrix')
     cofactors = minor(matrix)
     for i in range(len(matrix)):
         for j in range(len(matrix[0])):
