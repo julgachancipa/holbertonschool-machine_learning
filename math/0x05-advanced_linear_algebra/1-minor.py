@@ -39,7 +39,6 @@ def determinant(matrix):
     return total
 
 
-
 def getMatrixMinor(m, i, j):
     """
     :param m: matrix
