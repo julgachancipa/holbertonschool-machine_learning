@@ -11,7 +11,7 @@ def mean_cov(X):
     :param X: numpy.ndarray of shape (n, d) containing the data set
     :return: mean, cov
     """
-    if type(X) is not np.ndarray and len(X.shape) is not 2:
+    if type(X) is not np.ndarray or len(X.shape) is not 2:
         raise TypeError('X must be a 2D numpy.ndarray')
     n = X.shape[0]
     if n < 2:
