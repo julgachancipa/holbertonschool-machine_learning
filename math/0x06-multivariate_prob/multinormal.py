@@ -49,6 +49,10 @@ class MultiNormal ():
             d is the number of dimensions of the Multinomial instance
         :return: the value of the PDF
         """
+        if type(x) is not np.ndarray:
+            raise TypeError('x must be a numpy.ndarray')
+        if x.shape is not self.mean.shape:
+            raise ValueError('x must have the shape ({d}, 1)')
         d = x.shape[0]
         x_m = x - self.mean
         result = (1. / (np.sqrt((2 * np.pi) ** d * np.linalg.det(self.cov))) *
