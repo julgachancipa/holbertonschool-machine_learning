@@ -30,20 +30,10 @@ class MultiNormal ():
             n is the number of data points
             d is the number of dimensions in each data point
         """
-        if len(data.shape) is not 2:
+        if type(data) is not np.ndarray or len(data.shape) is not 2:
             raise TypeError('data must be a 2D numpy.ndarray')
         n = data.shape[1]
         if n < 2:
             raise ValueError('data must contain multiple data points')
         mean, self.cov = mean_cov(data.T)
         self.mean = mean.T
-
-    def pdf(self, x):
-        """
-        calculates the PDF at a data point
-        :param x: x is a numpy.ndarray of shape (d, 1) containing the data
-        point whose PDF should be calculated
-            d is the number of dimensions of the Multinomial instance
-        :return: the value of the PDF
-        """
-        pass
