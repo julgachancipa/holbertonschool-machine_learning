@@ -23,6 +23,9 @@ def mean_cov(X):
 
 
 class MultiNormal ():
+    """
+    Multinormal Class
+    """
     def __init__(self, data):
         """
         class constructor
