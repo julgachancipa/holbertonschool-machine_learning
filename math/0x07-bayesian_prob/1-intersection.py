@@ -14,7 +14,8 @@ def intersection(x, n, P, Pr):
     :param P: s a 1D numpy.ndarray containing the various hypothetical
     probabilities of developing severe side effects
     :param Pr: is a 1D numpy.ndarray containing the prior beliefs of P
-    :return:
+    :return: a 1D numpy.ndarray containing the intersection of obtaining
+    x and n with each probability in P, respectively
     """
     if not isinstance(n, (int, float)) or n <= 0:
         raise ValueError("n must be a positive integer")
