@@ -16,9 +16,6 @@ def initialize(X, k):
     :return: a numpy.ndarray of shape (k, d) containing the initialized
     centroids for each cluster, or None on failure
     """
-    if type(X) is not np.ndarray or len(X.shape) != 2\
-            or type(k) is not int or k <= 0:
-        return None
     _, d = X.shape
     low = np.amin(X, axis=0)
     high = np.amax(X, axis=0)
@@ -40,8 +37,11 @@ def kmeans(X, k, iterations=1000):
         clss is a numpy.ndarray of shape (n,) containing the index of the
         cluster in C that each data point belongs to
     """
-    if type(iterations) is not int:
+    if type(X) is not np.ndarray or len(X.shape) != 2\
+            or type(k) is not int or k <= 0\
+            or type(iterations) is not int:
         return None, None
+
     C = initialize(X, k)
 
     for _ in range(iterations):
