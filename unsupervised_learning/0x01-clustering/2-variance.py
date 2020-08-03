@@ -14,8 +14,10 @@ def variance(X, C):
     :return: var, or None on failure
         var is the total variance
     """
-    if type(X) is not np.ndarray:
+    if not isinstance(X, np.ndarray) or len(X.shape) != 2:
         return None
-    D = np.linalg.norm(X[:, None] - C, axis=-1)
-    clss = np.argmin(D, axis=-1)
-    return np.sum(np.sqrt(clss))
+    if not isinstance(C, np.ndarray) or len(C.shape) != 2:
+        return None
+    D = np.sqrt(((X - C[:, np.newaxis])**2).sum(axis=-1))
+    min_dist = np.min(D, axis=0)
+    return np.sum(min_dist ** 2)
