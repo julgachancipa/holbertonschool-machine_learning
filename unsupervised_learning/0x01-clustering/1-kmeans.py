@@ -46,8 +46,6 @@ def kmeans(X, k, iterations=1000):
     C = initialize(X, k)
     clss = None
     for _ in range(iterations):
-        p_C = np.copy(C)
-        p_clss = np.copy(clss)
         D = np.linalg.norm(X[:, None] - C, axis=-1)
         clss = np.argmin(D, axis=-1)
         for j in range(k):
@@ -56,7 +54,5 @@ def kmeans(X, k, iterations=1000):
                 C[j] = initialize(X, 1)
             else:
                 C[j] = np.mean(X[idx], axis=0)
-        if p_C.all() == C.all() and p_clss.all() == clss.all():
-            return C, clss
 
     return C, clss
