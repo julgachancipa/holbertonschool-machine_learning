@@ -57,5 +57,6 @@ def kmeans(X, k, iterations=1000):
                 C[j] = np.mean(X[idx], axis=0)
         if (prev_C == C).all():
             return C, clss
-
+    D = np.linalg.norm(X[:, None] - C, axis=-1)
+    clss = np.argmin(D, axis=-1)
     return C, clss
