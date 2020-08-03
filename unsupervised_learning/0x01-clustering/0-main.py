@@ -16,3 +16,6 @@ if __name__ == "__main__":
     plt.scatter(X[:, 0], X[:, 1], s=10)
     plt.show()
     print(initialize(X, 5))
+    print(initialize('hello', 5))
+    print(initialize(np.array([1, 2, 3, 4, 5]), 5))
+    print(initialize(np.array([[[1, 2, 3, 4, 5]]]), 5))

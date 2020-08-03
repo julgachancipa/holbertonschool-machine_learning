@@ -16,7 +16,7 @@ def initialize(X, k):
     :return: a numpy.ndarray of shape (k, d) containing the initialized
     centroids for each cluster, or None on failure
     """
-    if len(X.shape) != 2 or type(k) is not int:
+    if type(X) is not np.ndarray or len(X.shape) != 2 or type(k) is not int:
         return None
     _, d = X.shape
     low = np.amin(X, axis=0)
