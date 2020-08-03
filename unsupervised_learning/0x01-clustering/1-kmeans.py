@@ -40,8 +40,9 @@ def kmeans(X, k, iterations=1000):
         clss is a numpy.ndarray of shape (n,) containing the index of the
         cluster in C that each data point belongs to
     """
+    if type(iterations) is not int:
+        return None, None
     C = initialize(X, k)
-    clss = np.zeros((X.shape[0]))
 
     for _ in range(iterations):
         D = np.linalg.norm(X[:, None] - C, axis=-1)
