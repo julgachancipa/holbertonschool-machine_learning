@@ -39,7 +39,8 @@ def kmeans(X, k, iterations=1000):
     """
     if type(X) is not np.ndarray or len(X.shape) != 2\
             or type(k) is not int or k <= 0\
-            or type(iterations) is not int:
+            or type(iterations) is not int\
+            or iterations <= 0:
         return None, None
 
     C = initialize(X, k)
