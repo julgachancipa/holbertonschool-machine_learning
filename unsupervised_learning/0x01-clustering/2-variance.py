@@ -14,7 +14,7 @@ def variance(X, C):
     :return: var, or None on failure
         var is the total variance
     """
-    if type(X) is np.ndarray:
+    if type(X) is not np.ndarray:
         return None
     D = np.linalg.norm(X[:, None] - C, axis=-1)
     clss = np.argmin(D, axis=-1)
