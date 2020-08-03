@@ -48,11 +48,14 @@ def kmeans(X, k, iterations=1000):
     for _ in range(iterations):
         D = np.linalg.norm(X[:, None] - C, axis=-1)
         clss = np.argmin(D, axis=-1)
+        prev_C = np.copy(C)
         for j in range(k):
             idx = np.argwhere(clss == j)
             if not len(idx):
                 C[j] = initialize(X, 1)
             else:
                 C[j] = np.mean(X[idx], axis=0)
+        if (prev_C == C).all():
+            return C, clss
 
     return C, clss
