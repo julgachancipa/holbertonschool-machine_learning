@@ -35,7 +35,7 @@ def optimum_k(X, kmin=1, kmax=None, iterations=1000):
         if type(kmax) != int or kmax <= 0 or kmax >= X.shape[0]:
             return None, None
     else:
-        kmax = 1
+        kmax = kmin
     results = []
     d_vars = []
     for k in range(kmin, kmax + 1):
