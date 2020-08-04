@@ -27,15 +27,14 @@ def optimum_k(X, kmin=1, kmax=None, iterations=1000):
         return None, None
     if type(iterations) != int or iterations <= 0:
         return None, None
+    if not kmax:
+        kmax = X.shape[0]
     if type(kmin) != int or kmin <= 0 or kmin >= X.shape[0]:
         return None, None
-    if kmax:
-        if kmin >= kmax:
-            return None, None
-        if type(kmax) != int or kmax <= 0 or kmax >= X.shape[0]:
-            return None, None
-    else:
-        kmax = X.shape[0]
+    if kmin >= kmax:
+        return None, None
+    if type(kmax) != int or kmax <= 0 or kmax > X.shape[0]:
+        return None, None
     results = []
     d_vars = []
     for k in range(kmin, kmax + 1):
