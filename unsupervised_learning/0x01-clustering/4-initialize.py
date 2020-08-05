@@ -19,6 +19,10 @@ def initialize(X, k):
         S is a numpy.ndarray of shape (k, d, d) containing the covariance
         matrices for each cluster, initialized as identity matrices
     """
+    if not isinstance(X, np.ndarray) or len(X.shape) != 2\
+            or type(k) is not int or k <= 0:
+        return None, None
+
     pi = np.full((k,), 1 / k)
     m, _ = kmeans(X, k)
     d = X.shape[1]
