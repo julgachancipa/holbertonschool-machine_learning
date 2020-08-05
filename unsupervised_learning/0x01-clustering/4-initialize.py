@@ -21,7 +21,7 @@ def initialize(X, k):
     """
     if not isinstance(X, np.ndarray) or len(X.shape) != 2\
             or type(k) is not int or k <= 0:
-        return None, None
+        return None, None, None
 
     pi = np.full((k,), 1 / k)
     m, _ = kmeans(X, k)
