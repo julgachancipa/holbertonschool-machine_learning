@@ -49,8 +49,8 @@ def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
         pi, m, S = maximization(X, g)
 
         if verbose:
-            message = 'Log Likelihood after {} iterations: {}'.format(i,
-                                                                      lkhood)
+            message = 'Log Likelihood after {} iterations: {}'\
+                .format(i, lkhood.round(5))
             if (i % 10 == 0) or (i == 0):
                 print(message)
             if i == (iterations - 1):
