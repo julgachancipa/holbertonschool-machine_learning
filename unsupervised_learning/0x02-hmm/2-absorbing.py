@@ -19,7 +19,7 @@ def absorbing(P):
     if np.any(np.diag(P) == 1):
         for i, row in enumerate(P):
             for j, col in enumerate(row):
-                if i == j:
+                if i == j and ((i + 1) < len(P)) and ((j + 1) < len(P)):
                     if P[i + 1][j] == 0 and P[i][j + 1] == 0:
                         return False
         return True
