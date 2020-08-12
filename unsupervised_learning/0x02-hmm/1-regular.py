@@ -16,10 +16,10 @@ def regular(P):
     probabilities, or None on failure
     """
     try:
-        cols = P.shape[0]
-        ans = np.ones((1, cols))
-        eq = np.vstack([P.T - np.identity(cols), ans])
-        results = np.zeros((cols, 1))
+        n = P.shape[0]
+        ans = np.ones((1, n))
+        eq = np.vstack([P.T - np.identity(n), ans])
+        results = np.zeros((n, 1))
         results = np.vstack([results, np.array([1])])
         stationary = np.linalg.solve(eq.T.dot(eq), eq.T.dot(results)).T
         if len(np.argwhere(stationary < 0)) > 0:
