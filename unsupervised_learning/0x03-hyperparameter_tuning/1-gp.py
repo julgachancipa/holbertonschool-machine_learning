@@ -9,7 +9,7 @@ class GaussianProcess:
     """
     Represents a noiseless 1D Gaussian process
     """
-    def __init__(self, X_init, Y_init, len=1, sigma_f=1):
+    def __init__(self, X_init, Y_init, l=1, sigma_f=1):
         """
         Class constructor
         :param X_init: is a numpy.ndarray of shape (t, 1) representing the
@@ -23,7 +23,7 @@ class GaussianProcess:
         """
         self.X = X_init
         self.Y = Y_init
-        self.len = len
+        self.l = l
         self.sigma_f = sigma_f
         self.K = self.kernel(X_init, X_init)
 
