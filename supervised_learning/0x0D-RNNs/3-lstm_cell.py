@@ -59,7 +59,6 @@ class LSTMCell:
         fg = self.sigmoid(np.matmul(concat, self.Wf) + self.bf)
         ug = self.sigmoid(np.matmul(concat, self.Wu) + self.bu)
         cct = np.tanh(np.matmul(concat, self.Wc) + self.bc)
-        print(ug, cct, fg, c_prev)
         c_next = ug * cct + fg * c_prev
         ot = self.sigmoid(np.matmul(concat, self.Wo) + self.bo)
         h_next = ot * np.tanh(c_next)
