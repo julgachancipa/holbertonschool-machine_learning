@@ -4,7 +4,7 @@ import numpy as np
 BidirectionalCell = __import__('5-bi_forward'). BidirectionalCell
 
 np.random.seed(5)
-bi_cell =  BidirectionalCell(10, 15, 5)
+bi_cell = BidirectionalCell(10, 15, 5)
 print("Whf:", bi_cell.Whf)
 print("Whb:", bi_cell.Whb)
 print("Wy:", bi_cell.Wy)
