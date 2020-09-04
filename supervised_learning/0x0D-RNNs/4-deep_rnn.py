@@ -1,68 +1,39 @@
 #!/usr/bin/env python3
 """
-LSTM Cell
+Deep RNN
 """
 import numpy as np
 
 
-class LSTMCell:
+def deep_rnn(rnn_cells, X, h_0):
     """
-    Represents an LSTM unit
+    Performs forward propagation for a deep RNN
+    :param rnn_cells: is a list of RNNCell instances of length l
+    that will be used for the forward propagation
+        l is the number of layers
+    :param X: is the data to be used, given as a numpy.ndarray of
+    shape (t, m, i)
+        t is the maximum number of time steps
+        m is the batch size
+        i is the dimensionality of the data
+    :param h_0: is the initial hidden state, given as a numpy.ndarray
+    of shape (l, m, h)
+        h is the dimensionality of the hidden state
+    :return: H, Y
+        H is a numpy.ndarray containing all of the hidden states
+        Y is a numpy.ndarray containing all of the outputs
     """
-    def __init__(self, i, h, o):
-        """
-        Class constructor
-        :param i: is the dimensionality of the data
-        :param h: is the dimensionality of the hidden state
-        :param o: is the dimensionality of the outputs
-        """
-        self.Wf = np.random.randn(h+i, h)
-        self.Wu = np.random.randn(h+i, h)
-        self.Wc = np.random.randn(h+i, h)
-        self.Wo = np.random.randn(h+i, h)
-        self.Wy = np.random.randn(h, o)
+    T, m, i = X.shape
+    L, _, h = h_0.shape
 
-        self.bf = np.zeros((1, h))
-        self.bu = np.zeros((1, h))
-        self.bc = np.zeros((1, h))
-        self.bo = np.zeros((1, h))
-        self.by = np.zeros((1, o))
-
-    def sigmoid(self, z):
-        """
-        Sigmoid activation function
-        """
-        return 1 / (1 + np.exp(-z))
-
-    def softmax(self, z):
-        """Compute softmax values for each sets of scores in x"""
-        e_z = np.exp(z)
-        return e_z / e_z.sum(axis=1, keepdims=True)
-
-    def forward(self, h_prev, c_prev, x_t):
-        """
-        Performs forward propagation for one time step
-        :param h_prev: is a numpy.ndarray of shape (m, h) containing the
-        previous hidden state
-        :param c_prev: is a numpy.ndarray of shape (m, h) containing the
-        previous cell state
-        :param x_t: is a numpy.ndarray of shape (m, i) that contains the
-        data input for the cell
-            m is the batche size for the data
-        :return: h_next, c_next, y
-            h_next is the next hidden state
-            c_next is the next cell state
-            y is the output of the cell
-        """
-        concat = np.concatenate((h_prev, x_t), axis=1)
-
-        fg = self.sigmoid(np.matmul(concat, self.Wf) + self.bf)
-        ug = self.sigmoid(np.matmul(concat, self.Wu) + self.bu)
-        cct = np.tanh(np.matmul(concat, self.Wc) + self.bc)
-        c_next = ug * cct + fg * c_prev
-        ot = self.sigmoid(np.matmul(concat, self.Wo) + self.bo)
-        h_next = ot * np.tanh(c_next)
-
-        y = self.softmax(np.matmul(h_next, self.Wy) + self.by)
-
-        return h_next, c_next, y
+    H = np.zeros((T + 1, L, m, h))
+    H[0] = h_0
+    Y = []
+    for t in range(T):
+        aux = X[t]
+        for lay in range(L):
+            h_n, y = rnn_cells[lay].forward(H[t, lay], aux)
+            H[t + 1, lay] = h_n
+            aux = h_n
+        Y.append(y)
+    return H, np.array(Y)
